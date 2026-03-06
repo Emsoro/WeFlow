@@ -5364,6 +5364,7 @@ function ExportPage() {
             ? isSnsCardStatsLoading
             : false
           const isCardRunning = runningCardTypes.has(card.type)
+          const isPrimaryCard = card.type === 'text'
           return (
             <div key={card.type} className="content-card">
               <div className="card-header">
@@ -5393,7 +5394,7 @@ function ExportPage() {
                 ))}
               </div>
               <button
-                className={`card-export-btn ${isCardRunning ? 'running' : ''}`}
+                className={`card-export-btn ${isPrimaryCard ? 'primary' : 'secondary'} ${isCardRunning ? 'running' : ''}`}
                 disabled={isCardRunning}
                 onClick={() => {
                   if (card.type === 'sns') {
