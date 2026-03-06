@@ -1555,6 +1555,7 @@
   --contacts-message-col-width: 120px;
   --contacts-media-col-width: 72px;
   --contacts-action-col-width: 140px;
+  --contacts-table-min-width: 1200px;
   overflow: hidden;
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -1566,6 +1567,26 @@
 }
 
 .table-wrap {
+  .table-scroll-viewport {
+    flex: 1;
+    min-height: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .table-scroll-content {
+    min-width: max(100%, var(--contacts-table-min-width));
+    width: max-content;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   .session-table-sticky {
     position: sticky;
     top: 0;
@@ -1575,6 +1596,7 @@
 
   .loading-state,
   .empty-state {
+    width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1590,6 +1612,7 @@
   }
 
   .load-issue-state {
+    width: 100%;
     flex: 1;
     padding: 14px;
     overflow-y: auto;
@@ -1766,6 +1789,7 @@
   }
 
   .contacts-list {
+    width: 100%;
     flex: 1;
     min-height: var(--contacts-default-list-height);
     height: var(--contacts-default-list-height);
@@ -1785,6 +1809,34 @@
       border-radius: 3px;
       opacity: 0.3;
     }
+  }
+
+  .table-bottom-scrollbar {
+    flex: 0 0 auto;
+    height: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-top: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+    background: color-mix(in srgb, var(--bg-primary) 86%, var(--bg-secondary));
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--text-tertiary) 70%, transparent) transparent;
+
+    &::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text-tertiary) 70%, transparent);
+    }
+  }
+
+  .table-bottom-scrollbar-inner {
+    height: 1px;
   }
 
   .selection-clear-btn {
