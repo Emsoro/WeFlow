@@ -72,6 +72,7 @@ function App() {
   const isNotificationWindow = location.pathname === '/notification-window'
   const isExportRoute = location.pathname === '/export'
   const [themeHydrated, setThemeHydrated] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   // 锁定状态
   // const [isLocked, setIsLocked] = useState(false) // Moved to store
@@ -446,7 +447,10 @@ function App() {
           useHello={lockUseHello}
         />
       )}
-      <TitleBar />
+      <TitleBar
+        sidebarCollapsed={sidebarCollapsed}
+        onToggleSidebar={() => setSidebarCollapsed((prev) => !prev)}
+      />
 
       {/* 全局悬浮进度胶囊 (处理：新版本提示、下载进度、错误提示) */}
       <UpdateProgressCapsule />
@@ -557,7 +561,7 @@ function App() {
       />
 
       <div className="main-layout">
-        <Sidebar />
+        <Sidebar collapsed={sidebarCollapsed} />
         <main className="content">
           <RouteGuard>
             <div className={`export-keepalive-page ${isExportRoute ? 'active' : 'hidden'}`} aria-hidden={!isExportRoute}>

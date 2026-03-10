@@ -244,26 +244,6 @@
   gap: 4px;
 }
 
-.collapse-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 8px;
-  border: none;
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  border-radius: 9999px;
-  transition: all 0.2s ease;
-  margin-top: 4px;
-
-  &:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-  }
-}
-
 .sidebar-clear-dialog-overlay {
   position: fixed;
   inset: 0;

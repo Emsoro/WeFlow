@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Home, MessageSquare, BarChart3, FileText, Settings, ChevronLeft, ChevronRight, Download, Aperture, UserCircle, Lock, LockOpen, ChevronUp, Trash2 } from 'lucide-react'
+import { Home, MessageSquare, BarChart3, FileText, Settings, Download, Aperture, UserCircle, Lock, LockOpen, ChevronUp, Trash2 } from 'lucide-react'
 import { useAppStore } from '../stores/appStore'
 import * as configService from '../services/config'
 import { onExportSessionStatus, requestExportSessionStatus } from '../services/exportBridge'
@@ -62,10 +62,13 @@ const normalizeAccountId = (value?: string | null): string => {
   return suffixMatch ? suffixMatch[1] : trimmed
 }
 
-function Sidebar() {
+interface SidebarProps {
+  collapsed: boolean
+}
+
+function Sidebar({ collapsed }: SidebarProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const [collapsed, setCollapsed] = useState(false)
   const [authEnabled, setAuthEnabled] = useState(false)
   const [activeExportTaskCount, setActiveExportTaskCount] = useState(0)
   const [userProfile, setUserProfile] = useState<SidebarUserProfile>({
@@ -482,13 +485,6 @@ function Sidebar() {
           <span className="nav-label">设置</span>
         </NavLink>
 
-        <button
-          className="collapse-btn"
-          onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? '展开菜单' : '收起菜单'}
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
       </div>
 
       {showClearAccountDialog && (
