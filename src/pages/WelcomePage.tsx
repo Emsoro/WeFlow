@@ -647,7 +647,7 @@ function WelcomePage({ standalone = false }: WelcomePageProps) {
                   <input
                     type="text"
                     className="field-input"
-                    placeholder="例如：C:\\Users\\xxx\\Documents\\xwechat_files"
+                    placeholder={dbPathPlaceholder}
                     value={dbPath}
                     onChange={(e) => setDbPath(e.target.value)}
                   />
@@ -898,13 +898,17 @@ function WelcomePage({ standalone = false }: WelcomePageProps) {
         </div>
 
         <ConfirmDialog
-          open={showDbKeyConfirm}
-          title="开始获取数据库密钥"
-          message={`当开始获取后 WeFlow 将会执行准备操作
+            open={showDbKeyConfirm}
+            title="开始获取数据库密钥"
+            message={`当开始获取后 WeFlow 将会执行准备操作。
 
-当 WeFlow 内的提示条变为绿色显示允许登录或看到来自WeFlow的登录通知时，登录你的微信或退出当前登录并重新登录。`}
-          onConfirm={handleDbKeyConfirm}
-          onCancel={() => setShowDbKeyConfirm(false)}
+【⚠️ Linux 用户特别注意】
+如果您在微信里勾选了“自动登录”，请务必先打开微信设置 取消勾选自动登录，然后再点击下方确认！
+（因为授权弹窗输入密码需要时间，若自动登录太快，会导致获取密钥失败并卡死微信）
+
+当 WeFlow 内的提示条变为绿色显示“允许登录”或看到来自 WeFlow 的登录通知时，请在手机上确认登录微信。`}
+            onConfirm={handleDbKeyConfirm}
+            onCancel={() => setShowDbKeyConfirm(false)}
         />
       </div>
     </div>

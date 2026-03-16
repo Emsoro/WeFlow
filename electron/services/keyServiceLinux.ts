@@ -74,7 +74,6 @@ export class KeyServiceLinux {
   public async getDbKey(pid: number): Promise<DbKeyResult> {
     try {
       const helperPath = this.getHelperPath()
-
       const { stdout: scanOut } = await execFileAsync(helperPath, ['db_scan', pid.toString()])
       const scanRes = JSON.parse(scanOut.trim())
 
@@ -109,8 +108,13 @@ export class KeyServiceLinux {
     }
   }
 
-  public async autoGetImageKey(_accountPath: string, wxid?: string): Promise<ImageKeyResult> {
+  public async autoGetImageKey(
+      accountPath?: string,
+      onProgress?: (msg: string) => void,
+      wxid?: string
+  ): Promise<ImageKeyResult> {
     try {
+      if (onProgress) onProgress('正在初始化...');
       const helperPath = this.getHelperPath()
       const { stdout } = await execFileAsync(helperPath, ['image_local'])
       const res = JSON.parse(stdout.trim())
@@ -121,6 +125,7 @@ export class KeyServiceLinux {
       if (!account && accounts.length > 0) account = accounts[0]
 
       if (account && account.keys && account.keys.length > 0) {
+        if (onProgress) onProgress('已找到匹配的图片密钥');
         const keyObj = account.keys[0]
         return { success: true, xorKey: keyObj.xorKey, aesKey: keyObj.aesKey }
       }
@@ -130,23 +135,30 @@ export class KeyServiceLinux {
     }
   }
 
-  public async autoGetImageKeyByMemoryScan(accountPath: string): Promise<ImageKeyResult> {
+  public async autoGetImageKeyByMemoryScan(
+      accountPath: string,
+      onProgress?: (msg: string) => void
+  ): Promise<ImageKeyResult> {
     try {
+      if (onProgress) onProgress('正在获取微信进程...');
       const { stdout } = await execAsync('pidof wechat wechat-bin xwechat').catch(() => ({ stdout: '' }))
       const pids = stdout.trim().split(/\s+/).filter(p => p)
       if (pids.length === 0) return { success: false, error: '微信未运行，无法扫描内存' }
       const pid = parseInt(pids[0], 10)
 
+      if (onProgress) onProgress('正在提取图片特征码...');
       const ciphertextHex = this.findAnyDatCiphertext(accountPath)
       if (!ciphertextHex) {
-        return { success: false, error: '未在 FileStorage/Image 中找到 .dat 图片，请在微信中随便点开一张大图后重试' }
+        return { success: false, error: '未在 FileStorage/Image 找到缓存图片，请在微信中随便点开一张大图后重试' }
       }
 
+      if (onProgress) onProgress('正在提权扫描进程内存...');
       const helperPath = this.getHelperPath()
       const { stdout: memOut } = await execFileAsync(helperPath, ['image_mem', pid.toString(), ciphertextHex])
       const res = JSON.parse(memOut.trim())
 
       if (res.success) {
+        if (onProgress) onProgress('内存扫描成功');
         return { success: true, aesKey: res.key }
       }
       return { success: false, error: res.result }
@@ -154,7 +166,6 @@ export class KeyServiceLinux {
       return { success: false, error: err.message }
     }
   }
-
   private findAnyDatCiphertext(accountPath: string): string | null {
     try {
       const imgDir = join(accountPath, 'FileStorage', 'Image')
