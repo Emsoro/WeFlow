@@ -8,8 +8,8 @@ const MANIFEST_NAME = '.wf_manifest.json';
 const SIGNATURE_NAME = '.wf_manifest.sig';
 const MODULE_FILENAME = {
   win32: 'wcdb_api.dll',
-  darwin: 'wcdb_api.dylib',
-  linux: 'wcdb_api.so',
+  darwin: 'libwcdb_api.dylib',
+  linux: 'libwcdb_api.so',
 };
 
 function readTextIfExists(filePath) {
