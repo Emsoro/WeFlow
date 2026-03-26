@@ -139,6 +139,7 @@ jobs:
       - name: Package and Publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
           npx electron-builder --win nsis --x64 --publish always "-c.artifactName=\${productName}-\${version}-x64-Setup.\${ext}"
 
@@ -176,6 +177,7 @@ jobs:
       - name: Package and Publish Windows arm64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
           npx electron-builder --win nsis --arm64 --publish always -c.publish.channel=latest-arm64 "-c.artifactName=\${productName}-\${version}-arm64-Setup.\${ext}"
 
